@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+@import url("https://fonts.googleapis.com/css2?family=Bungee&display=swap");
+
+@theme {
+  /* Añadir un color nuevo */
+  --color-brand-blue: #0070f3;
+  --color-accent-pink: #ff0080;
+  /* Sobrescribir un color existente (opcional) */
+  --color-gray-500: #737373;
+  /* Color personalizado */
+  --color-super-magic: #5efc03;
+  --color-sky: #00dbff;
+
+  /* Fuente personalizada */
+  --font-special: "Bungee", system-ui;
+}
+
+/* Creamos una variante llamada 'peligro' */
+@variant peligro (&[data-status="error"]);
