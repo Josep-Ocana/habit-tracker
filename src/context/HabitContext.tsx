@@ -1,9 +1,15 @@
-import { createContext, useReducer } from "react";
-import { habitReducer, initialState } from "./habitReducer";
+import React, { createContext, useReducer } from "react";
+import {
+  habitReducer,
+  initialState,
+  type Action,
+  type State,
+} from "./habitReducer";
 
 // 1. TYPE
 type HabitContextType = {
   state: State;
+  dispatch: React.Dispatch<Action>;
 };
 
 // 2. CONTEXT
@@ -14,6 +20,8 @@ export function HabitProvider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = useReducer(habitReducer, initialState);
 
   return (
-    <HabitContext.Provider value={{ state }}>{children}</HabitContext.Provider>
+    <HabitContext.Provider value={{ state, dispatch }}>
+      {children}
+    </HabitContext.Provider>
   );
 }

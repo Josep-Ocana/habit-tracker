@@ -1,7 +1,14 @@
+import Footer from "./components/Footer";
+import Header from "./components/Header";
+
 function App() {
   return (
     <>
-      <h1 className="text-4xl text-brand-blue">Hola mundo</h1>
+      <div className="flex flex-col min-h-screen">
+        <Header />
+
+        <Footer />
+      </div>
     </>
   );
 }
