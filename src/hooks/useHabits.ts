@@ -1,7 +1,7 @@
 import { useContext } from "react";
-import { HabitContext } from "./HabitContext";
+import { HabitContext } from "../context/HabitContext";
 
-export function useTodos() {
+export function useHabits() {
   const context = useContext(HabitContext);
 
   if (!context) {
