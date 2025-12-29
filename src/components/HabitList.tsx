@@ -27,10 +27,10 @@ const HabitList = () => {
                     key={habit.id}
                   >
                     <p className="font-semibold text-gray-800">{habit.name}</p>
-                    <p>
+                    <p className="ml-auto">
                       {Object.entries(habit.days).map(([day, value]) => (
                         <button
-                          className={`ms-1 px-2 py-1 text-sm rounded-md transition ${
+                          className={`ms-1 px-2 py-1 text-xs rounded-md transition ${
                             value
                               ? "bg-green-500 hover:bg-green-600 text-white"
                               : "bg-gray-200 text-gray-700 hover:bg-gray-300"

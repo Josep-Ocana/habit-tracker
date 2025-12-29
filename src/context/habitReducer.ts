@@ -1,4 +1,5 @@
 import { type Habit, type HabitDays } from "../types";
+import { emptyDays } from "../utils/HabitUtils";
 
 export type State = {
   habits: Habit[];
@@ -41,20 +42,11 @@ export function habitReducer(state: State, action: Action): State {
       };
 
     case "RESET_WEEK":
-      const newDays: HabitDays = {
-        Lu: false,
-        Ma: false,
-        Mi: false,
-        Ju: false,
-        Vi: false,
-        Sa: false,
-        Do: false,
-      };
       return {
         ...state,
         habits: state.habits.map((habit) => ({
           ...habit,
-          days: newDays,
+          days: emptyDays(),
         })),
       };
     default:
