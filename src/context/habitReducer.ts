@@ -42,13 +42,13 @@ export function habitReducer(state: State, action: Action): State {
 
     case "RESET_WEEK":
       const newDays: HabitDays = {
-        mon: false,
-        tue: false,
-        wed: false,
-        thu: false,
-        fri: false,
-        sat: false,
-        sun: false,
+        Lu: false,
+        Ma: false,
+        Mi: false,
+        Ju: false,
+        Vi: false,
+        Sa: false,
+        Do: false,
       };
       return {
         ...state,

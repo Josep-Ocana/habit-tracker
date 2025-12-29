@@ -20,13 +20,13 @@ const AddHabitForm = () => {
       id: uuidv4(),
       name: inputValue,
       days: {
-        mon: false,
-        tue: false,
-        wed: false,
-        thu: false,
-        fri: false,
-        sat: false,
-        sun: false,
+        Lu: false,
+        Ma: false,
+        Mi: false,
+        Ju: false,
+        Vi: false,
+        Sa: false,
+        Do: false,
       },
     };
     dispatch({ type: "ADD_HABIT", payload: newHabit });

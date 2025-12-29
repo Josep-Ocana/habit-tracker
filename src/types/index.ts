@@ -5,11 +5,11 @@ export type Habit = {
 };
 
 export type HabitDays = {
-  mon: boolean;
-  tue: boolean;
-  wed: boolean;
-  thu: boolean;
-  fri: boolean;
-  sat: boolean;
-  sun: boolean;
+  Lu: boolean;
+  Ma: boolean;
+  Mi: boolean;
+  Ju: boolean;
+  Vi: boolean;
+  Sa: boolean;
+  Do: boolean;
 };
