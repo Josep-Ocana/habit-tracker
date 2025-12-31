@@ -6,7 +6,7 @@ const HabitList = () => {
 
   return (
     <>
-      <div className="mx-auto p-3">
+      <div className="flex flex-col mx-auto p-3">
         {state.habits.length <= 0 ? (
           <h2 className="text-2xl text-center">
             Añade un <span className="text-blue-900 font-bold">Hábito</span>
@@ -14,6 +14,12 @@ const HabitList = () => {
         ) : (
           <>
             <h2 className="text-2xl text-center mb-5">Habits List</h2>
+            <button
+              className="bg-yellow-500 text-white p-2 rounded-lg mx-auto mb-5 cursor-pointer"
+              onClick={() => dispatch({ type: "RESET_WEEK" })}
+            >
+              Resetear Semana
+            </button>
             <div>
               {state.habits.map((habit) => {
                 const completedDays = Object.values(habit.days).filter(
