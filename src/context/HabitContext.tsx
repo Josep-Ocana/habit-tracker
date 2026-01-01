@@ -1,4 +1,4 @@
-import React, { createContext, useReducer } from "react";
+import React, { createContext, useEffect, useReducer } from "react";
 import {
   habitReducer,
   initialState,
@@ -6,18 +6,35 @@ import {
   type State,
 } from "./habitReducer";
 
-// 1. TYPE
+//  CONSTANTS
+const HABITS_STORAGE_KEY = "habits";
+
+// TYPE
 type HabitContextType = {
   state: State;
   dispatch: React.Dispatch<Action>;
 };
 
-// 2. CONTEXT
+// CONTEXT
 export const HabitContext = createContext<HabitContextType | null>(null);
 
-// 3. PROVIDER
+// Inicializador del reducer
+const init = () => {
+  const storeHabits = localStorage.getItem(HABITS_STORAGE_KEY);
+  return {
+    habits: storeHabits ? JSON.parse(storeHabits) : [],
+  };
+};
+
+// PROVIDER
 export function HabitProvider({ children }: { children: React.ReactNode }) {
-  const [state, dispatch] = useReducer(habitReducer, initialState);
+  // useReducer con inicializador (init)
+  const [state, dispatch] = useReducer(habitReducer, initialState, init);
+
+  // Guardar cambios el localStorage
+  useEffect(() => {
+    localStorage.setItem(HABITS_STORAGE_KEY, JSON.stringify(state.habits));
+  }, [state.habits]);
 
   return (
     <HabitContext.Provider value={{ state, dispatch }}>
