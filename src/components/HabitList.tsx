@@ -35,6 +35,7 @@ const HabitList = () => {
             >
               Resetear Semana
             </button>
+
             <div>
               {state.habits.map((habit) => {
                 const completedDays = Object.values(habit.days).filter(
@@ -43,15 +44,52 @@ const HabitList = () => {
                 const percentage = Math.round((completedDays / 7) * 100);
 
                 return (
+                  // Carta
                   <div
-                    className="flex flex-col sm:flex-row sm:justify-between sm:items-center bg-white w-full p-3 mb-3 rounded-lg shadow-lg"
+                    className="bg-white w-full h-auto p-3 mb-3 rounded-lg shadow-lg"
                     key={habit.id}
                   >
-                    <p className="font-semibold text-gray-800">{habit.name}</p>
-                    <div className="ml-auto grid grid-cols-3 sm:grid-cols-7 gap-1">
+                    {/* FILA SUPERIOR */}
+                    <div className="flex items-center gap-3 mb-2">
+                      {/* Nombre Hábito */}
+                      <div className="max-w-150 overflow-x-auto scroll">
+                        <p className="font-semibold text-gray-800 whitespace-nowrap ">
+                          {habit.name}
+                        </p>
+                      </div>
+
+                      {/* Barra */}
+                      <div className="shrink-0 grow min-w-32 ml-auto ">
+                        <div className="w-full bg-gray-300 rounded-full h-3 ml-auto overflow-hidden">
+                          <div
+                            className={`h-full transition-all duration-500 ${
+                              percentage < 40
+                                ? "bg-red-500"
+                                : percentage < 70
+                                ? "bg-yellow-500"
+                                : "bg-green-500"
+                            }`}
+                            style={{ width: `${percentage}%` }}
+                          ></div>
+                        </div>
+                      </div>
+
+                      {/* % */}
+                      <span className="relative shrink-0 font-semibold w-10  text-right ">
+                        {percentage}%
+                        {percentage === 100 && (
+                          <span className="absolute top-6 right-1 animate-pulse text-2xl ">
+                            🔥
+                          </span>
+                        )}
+                      </span>
+                    </div>
+
+                    {/* Contenedor días semana */}
+                    <div className="flex flex-wrap justify-center h-5 gap-2">
                       {Object.entries(habit.days).map(([day, value]) => (
                         <button
-                          className={`ms-1 px-2 py-1 text-xs rounded-md transition ${
+                          className={` px-2 py-1 text-xs rounded-md transition shrink-0 ${
                             value
                               ? "bg-green-500 hover:bg-green-600 text-white"
                               : "bg-gray-200 text-gray-700 hover:bg-gray-300"
@@ -70,17 +108,6 @@ const HabitList = () => {
                         </button>
                       ))}
                     </div>
-                    <p
-                      className={`font-semibold w-10  text-right ${
-                        percentage < 40
-                          ? "text-red-500"
-                          : percentage < 70
-                          ? "text-yellow-500"
-                          : "text-green-500"
-                      }`}
-                    >
-                      {percentage}%
-                    </p>
                   </div>
                 );
               })}
