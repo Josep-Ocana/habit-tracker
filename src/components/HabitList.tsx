@@ -1,8 +1,18 @@
+import { useMemo } from "react";
 import { useHabits } from "../hooks/useHabits";
 import type { HabitDays } from "../types";
 
 const HabitList = () => {
-  const { state, dispatch, resetWeek, toggleDay } = useHabits();
+  const { state, resetWeek, toggleDay } = useHabits();
+
+  // Calcular progreso semanal
+  const globalPercentage = useMemo(() => {
+    const totalDays = state.habits.length * 7;
+    const completedDays = state.habits.reduce((acc, habit) => {
+      return acc + Object.values(habit.days).filter(Boolean).length;
+    }, 0);
+    return totalDays === 0 ? 0 : Math.round((completedDays / totalDays) * 100);
+  }, [state.habits]);
 
   const hasAnyCompletedDay = state.habits.some((habit) =>
     Object.values(habit.days).some(Boolean)
@@ -18,6 +28,26 @@ const HabitList = () => {
         ) : (
           <>
             <h2 className="text-2xl text-center mb-5">Habits List</h2>
+            <div className="flex justify-between items-center bg-white p-4 rounded-lg shadow-lg mb-3">
+              <p className="font-semibold">
+                Progreso Semanal: {globalPercentage} %
+              </p>
+
+              {/* Barra */}
+              <div className="w-full bg-gray-300 rounded-full h-4 ml-auto overflow-hidden">
+                <div
+                  className={`h-full transition-all duration-500 ${
+                    globalPercentage < 40
+                      ? "bg-red-500"
+                      : globalPercentage < 70
+                      ? "bg-yellow-500"
+                      : "bg-green-500"
+                  }`}
+                  style={{ width: `${globalPercentage}%` }}
+                ></div>
+              </div>
+            </div>
+
             <button
               className={`bg-yellow-500 text-white p-2 rounded-lg mx-auto mb-5  ${
                 hasAnyCompletedDay
