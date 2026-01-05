@@ -117,16 +117,19 @@ const HabitList = () => {
 
                     {/* Contenedor días semana */}
                     <div className="flex flex-wrap justify-center h-5 gap-2">
-                      {Object.entries(habit.days).map(([day, value]) => (
+                      {(
+                        Object.entries(habit.days) as [
+                          keyof HabitDays,
+                          boolean
+                        ][]
+                      ).map(([day, value]) => (
                         <button
                           className={` px-2 py-1 text-xs rounded-md transition shrink-0 ${
                             value
                               ? "bg-green-500 hover:bg-green-600 text-white"
                               : "bg-gray-200 text-gray-700 hover:bg-gray-300"
                           }`}
-                          onClick={() =>
-                            toggleDay(habit.id, day as keyof HabitDays)
-                          }
+                          onClick={() => toggleDay(habit.id, day)}
                         >
                           {day}
                         </button>
