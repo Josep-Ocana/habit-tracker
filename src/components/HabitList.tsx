@@ -28,13 +28,13 @@ const HabitList = () => {
         ) : (
           <>
             <h2 className="text-2xl text-center mb-5">Habits List</h2>
-            <div className="flex justify-between items-center bg-white p-4 rounded-lg shadow-lg mb-3">
-              <p className="font-semibold">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-3 bg-white p-4 rounded-lg shadow-lg mb-3">
+              <p className="font-semibold shrink-0">
                 Progreso Semanal: {globalPercentage} %
               </p>
 
               {/* Barra */}
-              <div className="w-full bg-gray-300 rounded-full h-4 ml-auto overflow-hidden">
+              <div className="bg-gray-300 rounded-full h-4 overflow-hidden">
                 <div
                   className={`h-full transition-all duration-500 ${
                     globalPercentage < 40
