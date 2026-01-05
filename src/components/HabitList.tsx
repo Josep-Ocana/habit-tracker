@@ -2,7 +2,7 @@ import { useHabits } from "../hooks/useHabits";
 import type { HabitDays } from "../types";
 
 const HabitList = () => {
-  const { state, dispatch } = useHabits();
+  const { state, dispatch, resetWeek, toggleDay } = useHabits();
 
   const hasAnyCompletedDay = state.habits.some((habit) =>
     Object.values(habit.days).some(Boolean)
@@ -29,7 +29,7 @@ const HabitList = () => {
                   hasAnyCompletedDay &&
                   window.confirm("Resetear toda la semana?")
                 ) {
-                  dispatch({ type: "RESET_WEEK" });
+                  resetWeek();
                 }
               }}
             >
@@ -95,13 +95,7 @@ const HabitList = () => {
                               : "bg-gray-200 text-gray-700 hover:bg-gray-300"
                           }`}
                           onClick={() =>
-                            dispatch({
-                              type: "TOGGLE_DAY",
-                              payload: {
-                                habitId: habit.id,
-                                day: day as keyof HabitDays,
-                              },
-                            })
+                            toggleDay(habit.id, day as keyof HabitDays)
                           }
                         >
                           {day}

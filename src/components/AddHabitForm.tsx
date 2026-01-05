@@ -1,12 +1,11 @@
 import { useState } from "react";
-import { v4 as uuidv4 } from "uuid";
 import { useHabits } from "../hooks/useHabits";
 
 const AddHabitForm = () => {
   const [inputValue, setInputValue] = useState<string>("");
   const [alerta, setAlerta] = useState<string>("");
 
-  const { dispatch } = useHabits();
+  const { dispatch, addHabit } = useHabits();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -16,20 +15,7 @@ const AddHabitForm = () => {
       return;
     }
     setAlerta("");
-    const newHabit = {
-      id: uuidv4(),
-      name: inputValue,
-      days: {
-        Lu: false,
-        Ma: false,
-        Mi: false,
-        Ju: false,
-        Vi: false,
-        Sa: false,
-        Do: false,
-      },
-    };
-    dispatch({ type: "ADD_HABIT", payload: newHabit });
+    addHabit(inputValue);
     setInputValue("");
   };
 

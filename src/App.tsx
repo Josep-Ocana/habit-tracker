@@ -1,6 +1,6 @@
 import AddHabitForm from "./components/AddHabitForm";
 import Footer from "./components/Footer";
-import HabitList from "./components/habitList";
+import HabitList from "./components/HabitList";
 import Header from "./components/Header";
 
 function App() {

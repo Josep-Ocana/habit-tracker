@@ -1,5 +1,7 @@
 import { useContext } from "react";
+import { v4 as uuidv4 } from "uuid";
 import { HabitContext } from "../context/HabitContext";
+import type { Habit, HabitDays } from "../types";
 
 export function useHabits() {
   const context = useContext(HabitContext);
@@ -7,5 +9,40 @@ export function useHabits() {
   if (!context) {
     throw new Error("useHabitContext debe usarse dentro de HabitProvider");
   }
-  return context;
+
+  const { state, dispatch } = context;
+
+  // Actions
+  const addHabit = (name: string) => {
+    const newHabit = {
+      id: uuidv4(),
+      name,
+      days: {
+        Lu: false,
+        Ma: false,
+        Mi: false,
+        Ju: false,
+        Vi: false,
+        Sa: false,
+        Do: false,
+      },
+    };
+    dispatch({ type: "ADD_HABIT", payload: newHabit });
+  };
+
+  const resetWeek = () => {
+    dispatch({ type: "RESET_WEEK" });
+  };
+
+  const toggleDay = (id: Habit["id"], day: keyof HabitDays) => {
+    dispatch({ type: "TOGGLE_DAY", payload: { habitId: id, day } });
+  };
+
+  return {
+    addHabit,
+    resetWeek,
+    toggleDay,
+    state,
+    dispatch,
+  };
 }
