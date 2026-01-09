@@ -11,10 +11,12 @@ export const initialState: State = {
 
 export type Action =
   | { type: "ADD_HABIT"; payload: Habit }
+  | { type: "UPDATE_HABIT"; payload: { habitId: Habit["id"]; name: string } }
   | {
       type: "TOGGLE_DAY";
       payload: { habitId: Habit["id"]; day: keyof HabitDays };
     }
+  | { type: "DELETE_HABIT"; payload: Habit["id"] }
   | { type: "RESET_WEEK" };
 
 export function habitReducer(state: State, action: Action): State {
@@ -23,6 +25,25 @@ export function habitReducer(state: State, action: Action): State {
       return {
         ...state,
         habits: [...state.habits, action.payload],
+      };
+
+    case "UPDATE_HABIT":
+      return {
+        ...state,
+        habits: state.habits.map((habit) =>
+          habit.id === action.payload.habitId
+            ? {
+                ...habit,
+                name: action.payload.name,
+              }
+            : habit
+        ),
+      };
+
+    case "DELETE_HABIT":
+      return {
+        ...state,
+        habits: state.habits.filter((habit) => habit.id !== action.payload),
       };
 
     case "TOGGLE_DAY":

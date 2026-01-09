@@ -30,6 +30,15 @@ export function useHabits() {
     dispatch({ type: "ADD_HABIT", payload: newHabit });
   };
 
+  const updateHabit = (id: Habit["id"], name: string) => {
+    const trimmed = name.trim();
+    dispatch({ type: "UPDATE_HABIT", payload: { habitId: id, name: trimmed } });
+  };
+
+  const deleteHabit = (id: Habit["id"]) => {
+    dispatch({ type: "DELETE_HABIT", payload: id });
+  };
+
   const resetWeek = () => {
     dispatch({ type: "RESET_WEEK" });
   };
@@ -40,9 +49,10 @@ export function useHabits() {
 
   return {
     addHabit,
+    updateHabit,
+    deleteHabit,
     resetWeek,
     toggleDay,
     state,
-    dispatch,
   };
 }

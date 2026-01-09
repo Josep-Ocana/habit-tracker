@@ -5,7 +5,7 @@ const AddHabitForm = () => {
   const [inputValue, setInputValue] = useState<string>("");
   const [alerta, setAlerta] = useState<string>("");
 
-  const { dispatch, addHabit } = useHabits();
+  const { addHabit } = useHabits();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
