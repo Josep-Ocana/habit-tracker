@@ -22,7 +22,7 @@ const HabitList = () => {
   }, [state.habits]);
 
   const hasAnyCompletedDay = state.habits.some((habit) =>
-    Object.values(habit.days).some(Boolean)
+    Object.values(habit.days).some(Boolean),
   );
 
   const startEditing = (id: Habit["id"], habitName: string) => {
@@ -47,8 +47,7 @@ const HabitList = () => {
           <>
             <h2 className="text-2xl text-center mb-5">Habits List</h2>
 
-            {/* Progreso semanal
-             */}
+            {/* Progreso semanal ____________________________________________________*/}
             <div className="flex items-center gap-3 bg-white p-4 rounded-lg shadow-lg mb-3">
               {/* Barra */}
 
@@ -59,8 +58,8 @@ const HabitList = () => {
                     globalPercentage < 40
                       ? "bg-red-500"
                       : globalPercentage < 70
-                      ? "bg-yellow-500"
-                      : "bg-green-500"
+                        ? "bg-yellow-500"
+                        : "bg-green-500"
                   }`}
                   style={{ width: `${globalPercentage}%` }}
                 ></div>
@@ -86,24 +85,28 @@ const HabitList = () => {
               Resetear Semana
             </button>
 
-            {/* Lista de Hábitos */}
+            {/* Lista de Hábitos____________________________________________________*/}
             <div>
               {state.habits.map((habit) => {
                 const completedDays = Object.values(habit.days).filter(
-                  Boolean
+                  Boolean,
                 ).length;
                 const percentage = Math.round((completedDays / 7) * 100);
 
+                const isWeekCompleted = Object.values(habit.days).every(
+                  Boolean,
+                );
+
                 return (
-                  // Contenedor
+                  // Contenedor Principal
                   <div
                     className="bg-white w-full h-auto p-3 mb-3 rounded-lg shadow-lg"
                     key={habit.id}
                   >
-                    {/* FILA SUPERIOR */}
-                    <div className="grid grid-cols-[1fr_auto_auto_auto] items-center gap-3 mb-2 h-10">
-                      {/* Nombre Hábito + edicion */}
-                      <div className=" overflow-x-auto scroll">
+                    {/* FILA SUPERIOR ________________________________________________*/}
+                    <div className="flex flex-col sm:flex-row justify-between items-center gap-3 mb-2">
+                      {/* Nombre/edición Hábito + Badge */}
+                      <div className="relative flex gap-2 min-w-0">
                         {editingHabitId === habit.id ? (
                           <input
                             autoFocus
@@ -115,76 +118,89 @@ const HabitList = () => {
                             onChange={(e) => setEditName(e.target.value)}
                           />
                         ) : (
-                          <p className="relative font-semibold text-gray-800 truncate flex items-center gap-2">
+                          <p className="font-semibold text-gray-800 truncate">
                             {habit.name}
-                            {percentage === 100 && (
-                              <span className="animate-pulse text-xl ">🔥</span>
-                            )}
                           </p>
+                        )}
+                        {/* Badge */}
+                        {isWeekCompleted && (
+                          <span
+                            className="
+                              sm:absolute top-6 
+                              inline-block whitespace-nowrap
+                              text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full
+                              transition-all duration-300 ease-out
+                              animate-badge
+                              sm:[animation-delay:75ms]
+                              "
+                          >
+                            Semana completada
+                          </span>
                         )}
                       </div>
 
                       {/* Barra */}
-                      <div className="shrink-0 w-24 sm:w-60 bg-gray-300 rounded-full h-3 overflow-hidden">
-                        <div
-                          className={`h-full transition-all duration-500 ${
-                            percentage < 40
-                              ? "bg-red-500"
-                              : percentage < 70
-                              ? "bg-yellow-500"
-                              : "bg-green-500"
-                          }`}
-                          style={{ width: `${percentage}%` }}
-                        ></div>
-                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="w-60 bg-gray-300 rounded-full h-3 overflow-hidden">
+                          <div
+                            className={`h-full transition-all duration-500 ${
+                              percentage < 40
+                                ? "bg-red-500"
+                                : percentage < 70
+                                  ? "bg-yellow-500"
+                                  : "bg-green-500"
+                            }`}
+                            style={{ width: `${percentage}%` }}
+                          ></div>
+                        </div>
+                        {/* %*/}
+                        <span className="relative font-semibold w-10 text-right mr-3">
+                          {percentage}%
+                        </span>
 
-                      {/* % */}
-                      <span className="relative font-semibold w-10 text-right mr-3">
-                        {percentage}%
-                      </span>
-
-                      {/* Botones */}
-                      <div className="w-14 flex justify-end  gap-1">
-                        {editingHabitId === habit.id ? (
-                          <div className="flex shrink-0 ">
-                            <img
-                              className="cursor-pointer"
-                              aria-label="Botón Guardar hábito"
-                              src={SaveIcon}
-                              onClick={() => {
-                                handleSave(habit.id);
-                              }}
-                            />
-                            <img
-                              className="cursor-pointer"
-                              aria-label="Boton Cancelar hábito"
-                              src={CancelIcon}
-                              onClick={() => setEditingHabitId(null)}
-                            />
-                          </div>
-                        ) : (
-                          <>
-                            <div className="flex shrink-0">
+                        {/* Botones*/}
+                        <div className="w-14 flex justify-end  gap-1">
+                          {editingHabitId === habit.id ? (
+                            <div className="flex shrink-0 ">
                               <img
                                 className="cursor-pointer"
-                                aria-label="Botón editar hábito"
-                                src={EditIcon}
+                                aria-label="Botón Guardar hábito"
+                                src={SaveIcon}
                                 onClick={() => {
-                                  startEditing(habit.id, habit.name);
+                                  handleSave(habit.id);
                                 }}
                               />
                               <img
                                 className="cursor-pointer"
-                                aria-label="Botón Eliminar hábito"
-                                src={DeleteIcon}
-                                onClick={() => {
-                                  window.confirm("Eliminar hábito? ") &&
-                                    deleteHabit(habit.id);
-                                }}
+                                aria-label="Boton Cancelar hábito"
+                                src={CancelIcon}
+                                onClick={() => setEditingHabitId(null)}
                               />
                             </div>
-                          </>
-                        )}
+                          ) : (
+                            <>
+                              <div className="flex shrink-0">
+                                <img
+                                  className="cursor-pointer"
+                                  aria-label="Botón editar hábito"
+                                  src={EditIcon}
+                                  onClick={() => {
+                                    startEditing(habit.id, habit.name);
+                                  }}
+                                />
+                                <img
+                                  className="cursor-pointer"
+                                  aria-label="Botón Eliminar hábito"
+                                  src={DeleteIcon}
+                                  onClick={() => {
+                                    window.confirm("Eliminar hábito? ") &&
+                                      deleteHabit(habit.id);
+                                  }}
+                                />
+                              </div>
+                            </>
+                          )}
+                        </div>
                       </div>
                     </div>
 
@@ -193,7 +209,7 @@ const HabitList = () => {
                       {(
                         Object.entries(habit.days) as [
                           keyof HabitDays,
-                          boolean
+                          boolean,
                         ][]
                       ).map(([day, value]) => (
                         <button
