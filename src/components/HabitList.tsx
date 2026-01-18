@@ -1,4 +1,8 @@
 import { useMemo, useState } from "react";
+import {
+  getHabitPercentage,
+  isHabitWeekCompleted,
+} from "../domains/habits.domain";
 import { useHabits } from "../hooks/useHabits";
 import CancelIcon from "../icons/cancel.svg";
 import DeleteIcon from "../icons/delete.svg";
@@ -88,14 +92,8 @@ const HabitList = () => {
             {/* Lista de Hábitos____________________________________________________*/}
             <div>
               {state.habits.map((habit) => {
-                const completedDays = Object.values(habit.days).filter(
-                  Boolean,
-                ).length;
-                const percentage = Math.round((completedDays / 7) * 100);
-
-                const isWeekCompleted = Object.values(habit.days).every(
-                  Boolean,
-                );
+                const percentage = getHabitPercentage(habit);
+                const isWeekCompleted = isHabitWeekCompleted(habit);
 
                 return (
                   // Contenedor Principal
