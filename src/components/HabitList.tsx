@@ -1,7 +1,9 @@
 import { useMemo, useState } from "react";
 import {
+  getGlobalPercentage,
   getHabitPercentage,
   isHabitWeekCompleted,
+  someDayCompleted,
 } from "../domains/habits.domain";
 import { useHabits } from "../hooks/useHabits";
 import CancelIcon from "../icons/cancel.svg";
@@ -17,16 +19,14 @@ const HabitList = () => {
   const [editName, setEditName] = useState<string>("");
 
   // Calcular progreso semanal
-  const globalPercentage = useMemo(() => {
-    const totalDays = state.habits.length * 7;
-    const completedDays = state.habits.reduce((acc, habit) => {
-      return acc + Object.values(habit.days).filter(Boolean).length;
-    }, 0);
-    return totalDays === 0 ? 0 : Math.round((completedDays / totalDays) * 100);
-  }, [state.habits]);
+  const globalPercentage = useMemo(
+    () => getGlobalPercentage(state.habits),
+    [state.habits],
+  );
 
-  const hasAnyCompletedDay = state.habits.some((habit) =>
-    Object.values(habit.days).some(Boolean),
+  const hasAnyCompletedDay = useMemo(
+    () => state.habits.some(someDayCompleted),
+    [state.habits],
   );
 
   const startEditing = (id: Habit["id"], habitName: string) => {

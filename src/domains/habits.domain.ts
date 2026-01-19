@@ -14,3 +14,17 @@ export const getHabitPercentage = (habit: Habit): number => {
 export const isHabitWeekCompleted = (habit: Habit): boolean => {
   return Object.values(habit.days).every(Boolean);
 };
+
+// Calcular el porcentaje global de hábitos
+export const getGlobalPercentage = (habits: Habit[]): number => {
+  const totalDays = habits.length * 7;
+  const completedDays = habits.reduce((acc, habit) => {
+    return acc + Object.values(habit.days).filter(Boolean).length;
+  }, 0);
+  return totalDays === 0 ? 0 : Math.round((completedDays / totalDays) * 100);
+};
+
+// Saber si hay algun dia completado
+export const someDayCompleted = (habit: Habit): boolean => {
+  return Object.values(habit.days).some(Boolean);
+};
