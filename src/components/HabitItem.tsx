@@ -1,0 +1,164 @@
+import { useState } from "react";
+import {
+  getHabitPercentage,
+  isHabitWeekCompleted,
+} from "../domains/habits.domain";
+import CancelIcon from "../icons/cancel.svg";
+import DeleteIcon from "../icons/delete.svg";
+import EditIcon from "../icons/edit.svg";
+import SaveIcon from "../icons/save.svg";
+import type { Habit, HabitDays } from "../types";
+
+type HabitItemProps = {
+  habit: Habit;
+  toggleDay: (id: string, day: keyof HabitDays) => void;
+  updateHabit: (id: string, name: string) => void;
+  deleteHabit: (id: string) => void;
+};
+
+function HabitItem({
+  habit,
+  toggleDay,
+  updateHabit,
+  deleteHabit,
+}: HabitItemProps) {
+  const [isEditing, setIsEditing] = useState(false);
+  const [editName, setEditName] = useState<string>("");
+
+  const percentage = getHabitPercentage(habit);
+  const isWeekCompleted = isHabitWeekCompleted(habit);
+
+  const startEditing = (habitName: string) => {
+    setIsEditing(true);
+    setEditName(habitName);
+  };
+
+  const handleSave = (id: Habit["id"]) => {
+    updateHabit(id, editName);
+    setIsEditing(false);
+    setEditName("");
+  };
+
+  return (
+    <div className="bg-white w-full h-auto p-3 mb-3 rounded-lg shadow-lg">
+      {/* FILA SUPERIOR ________________________________________________*/}
+      <div className="flex flex-col sm:flex-row justify-between items-center gap-3 mb-2">
+        {/* Nombre/edición Hábito + Badge */}
+        <div className="relative flex gap-2 min-w-0">
+          {isEditing ? (
+            <input
+              autoFocus
+              type="text"
+              className="w-full border rounded-lg pl-2"
+              aria-label="Editar hábito"
+              placeholder="Edita el hábito"
+              value={editName}
+              onChange={(e) => setEditName(e.target.value)}
+            />
+          ) : (
+            <p className="font-semibold text-gray-800 truncate">{habit.name}</p>
+          )}
+          {/* Badge */}
+          {isWeekCompleted && (
+            <span
+              className="
+                  sm:absolute top-6 
+                  inline-block whitespace-nowrap
+                  text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full
+                  transition-all duration-300 ease-out
+                  animate-badge
+                  sm:[animation-delay:75ms]
+                  "
+            >
+              Semana completada
+            </span>
+          )}
+        </div>
+
+        {/* Barra */}
+        <div className="flex items-center gap-2">
+          <div className="w-60 bg-gray-300 rounded-full h-3 overflow-hidden">
+            <div
+              className={`h-full transition-all duration-500 ${
+                percentage < 40
+                  ? "bg-red-500"
+                  : percentage < 70
+                    ? "bg-yellow-500"
+                    : "bg-green-500"
+              }`}
+              style={{ width: `${percentage}%` }}
+            ></div>
+          </div>
+          {/* %*/}
+          <span className="relative font-semibold w-10 text-right mr-3">
+            {percentage}%
+          </span>
+
+          {/* Botones*/}
+          <div className="w-14 flex justify-end gap-1">
+            {isEditing ? (
+              <div className="flex shrink-0">
+                <img
+                  className="cursor-pointer"
+                  aria-label="Botón Guardar hábito"
+                  src={SaveIcon}
+                  onClick={() => {
+                    handleSave(habit.id);
+                  }}
+                />
+                <img
+                  className="cursor-pointer"
+                  aria-label="Boton Cancelar hábito"
+                  src={CancelIcon}
+                  onClick={() => {
+                    setIsEditing(false);
+                    setEditName("");
+                  }}
+                />
+              </div>
+            ) : (
+              <div className="flex shrink-0">
+                <img
+                  className="cursor-pointer"
+                  aria-label="Botón editar hábito"
+                  src={EditIcon}
+                  onClick={() => {
+                    startEditing(habit.name);
+                  }}
+                />
+                <img
+                  className="cursor-pointer"
+                  aria-label="Botón Eliminar hábito"
+                  src={DeleteIcon}
+                  onClick={() => {
+                    window.confirm("Eliminar hábito? ") &&
+                      deleteHabit(habit.id);
+                  }}
+                />
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+      {/* Fila inferior */}
+      <div className="flex flex-wrap justify-center gap-2 mt-2 ">
+        {(Object.entries(habit.days) as [keyof HabitDays, boolean][]).map(
+          ([day, value]) => (
+            <button
+              className={` px-2 py-1 text-xs rounded-md transition shrink-0 ${
+                value
+                  ? "bg-green-500 hover:bg-green-600 text-white"
+                  : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+              }`}
+              onClick={() => toggleDay(habit.id, day)}
+            >
+              {day}
+            </button>
+          ),
+        )}
+      </div>
+    </div>
+  );
+}
+
+export default HabitItem;

@@ -1,22 +1,14 @@
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import {
   getGlobalPercentage,
-  getHabitPercentage,
-  isHabitWeekCompleted,
   someDayCompleted,
 } from "../domains/habits.domain";
 import { useHabits } from "../hooks/useHabits";
-import CancelIcon from "../icons/cancel.svg";
-import DeleteIcon from "../icons/delete.svg";
-import EditIcon from "../icons/edit.svg";
-import SaveIcon from "../icons/save.svg";
-import type { Habit, HabitDays } from "../types";
+
+import HabitItem from "./HabitItem";
 
 const HabitList = () => {
   const { state, resetWeek, toggleDay, updateHabit, deleteHabit } = useHabits();
-
-  const [editingHabitId, setEditingHabitId] = useState<string | null>(null);
-  const [editName, setEditName] = useState<string>("");
 
   // Calcular progreso semanal
   const globalPercentage = useMemo(
@@ -24,21 +16,11 @@ const HabitList = () => {
     [state.habits],
   );
 
+  // Evaluar si en algun hábito hay algun dia completo
   const hasAnyCompletedDay = useMemo(
     () => state.habits.some(someDayCompleted),
     [state.habits],
   );
-
-  const startEditing = (id: Habit["id"], habitName: string) => {
-    setEditingHabitId(id);
-    setEditName(habitName);
-  };
-
-  const handleSave = (id: Habit["id"]) => {
-    updateHabit(id, editName);
-    setEditingHabitId(null);
-    setEditName("");
-  };
 
   return (
     <>
@@ -92,144 +74,19 @@ const HabitList = () => {
             {/* Lista de Hábitos____________________________________________________*/}
             <div>
               {state.habits.map((habit) => {
-                const percentage = getHabitPercentage(habit);
-                const isWeekCompleted = isHabitWeekCompleted(habit);
-
                 return (
-                  // Contenedor Principal
-                  <div
-                    className="bg-white w-full h-auto p-3 mb-3 rounded-lg shadow-lg"
+                  <HabitItem
                     key={habit.id}
-                  >
-                    {/* FILA SUPERIOR ________________________________________________*/}
-                    <div className="flex flex-col sm:flex-row justify-between items-center gap-3 mb-2">
-                      {/* Nombre/edición Hábito + Badge */}
-                      <div className="relative flex gap-2 min-w-0">
-                        {editingHabitId === habit.id ? (
-                          <input
-                            autoFocus
-                            type="text"
-                            className="w-full border rounded-lg pl-2"
-                            aria-label="Editar hábito"
-                            placeholder="Edita el hábito"
-                            value={editName}
-                            onChange={(e) => setEditName(e.target.value)}
-                          />
-                        ) : (
-                          <p className="font-semibold text-gray-800 truncate">
-                            {habit.name}
-                          </p>
-                        )}
-                        {/* Badge */}
-                        {isWeekCompleted && (
-                          <span
-                            className="
-                              sm:absolute top-6 
-                              inline-block whitespace-nowrap
-                              text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full
-                              transition-all duration-300 ease-out
-                              animate-badge
-                              sm:[animation-delay:75ms]
-                              "
-                          >
-                            Semana completada
-                          </span>
-                        )}
-                      </div>
-
-                      {/* Barra */}
-                      <div className="flex items-center gap-2">
-                        <div className="w-60 bg-gray-300 rounded-full h-3 overflow-hidden">
-                          <div
-                            className={`h-full transition-all duration-500 ${
-                              percentage < 40
-                                ? "bg-red-500"
-                                : percentage < 70
-                                  ? "bg-yellow-500"
-                                  : "bg-green-500"
-                            }`}
-                            style={{ width: `${percentage}%` }}
-                          ></div>
-                        </div>
-                        {/* %*/}
-                        <span className="relative font-semibold w-10 text-right mr-3">
-                          {percentage}%
-                        </span>
-
-                        {/* Botones*/}
-                        <div className="w-14 flex justify-end  gap-1">
-                          {editingHabitId === habit.id ? (
-                            <div className="flex shrink-0 ">
-                              <img
-                                className="cursor-pointer"
-                                aria-label="Botón Guardar hábito"
-                                src={SaveIcon}
-                                onClick={() => {
-                                  handleSave(habit.id);
-                                }}
-                              />
-                              <img
-                                className="cursor-pointer"
-                                aria-label="Boton Cancelar hábito"
-                                src={CancelIcon}
-                                onClick={() => setEditingHabitId(null)}
-                              />
-                            </div>
-                          ) : (
-                            <>
-                              <div className="flex shrink-0">
-                                <img
-                                  className="cursor-pointer"
-                                  aria-label="Botón editar hábito"
-                                  src={EditIcon}
-                                  onClick={() => {
-                                    startEditing(habit.id, habit.name);
-                                  }}
-                                />
-                                <img
-                                  className="cursor-pointer"
-                                  aria-label="Botón Eliminar hábito"
-                                  src={DeleteIcon}
-                                  onClick={() => {
-                                    window.confirm("Eliminar hábito? ") &&
-                                      deleteHabit(habit.id);
-                                  }}
-                                />
-                              </div>
-                            </>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Fila inferior */}
-                    <div className="flex flex-wrap justify-center gap-2 mt-2 ">
-                      {(
-                        Object.entries(habit.days) as [
-                          keyof HabitDays,
-                          boolean,
-                        ][]
-                      ).map(([day, value]) => (
-                        <button
-                          className={` px-2 py-1 text-xs rounded-md transition shrink-0 ${
-                            value
-                              ? "bg-green-500 hover:bg-green-600 text-white"
-                              : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                          }`}
-                          onClick={() => toggleDay(habit.id, day)}
-                        >
-                          {day}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
+                    habit={habit}
+                    toggleDay={toggleDay}
+                    updateHabit={updateHabit}
+                    deleteHabit={deleteHabit}
+                  />
                 );
               })}
             </div>
           </>
         )}
-
-        <div className="flex justify-between"></div>
       </div>
     </>
   );
