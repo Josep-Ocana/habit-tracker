@@ -1,8 +1,8 @@
-import { useState } from "react";
 import {
   getHabitPercentage,
   isHabitWeekCompleted,
 } from "../domains/habits.domain";
+import { useHabitItem } from "../hooks/useHabitItem";
 import CancelIcon from "../icons/cancel.svg";
 import DeleteIcon from "../icons/delete.svg";
 import EditIcon from "../icons/edit.svg";
@@ -12,32 +12,22 @@ import type { Habit, HabitDays } from "../types";
 type HabitItemProps = {
   habit: Habit;
   toggleDay: (id: string, day: keyof HabitDays) => void;
-  updateHabit: (id: string, name: string) => void;
   deleteHabit: (id: string) => void;
 };
 
-function HabitItem({
-  habit,
-  toggleDay,
-  updateHabit,
-  deleteHabit,
-}: HabitItemProps) {
-  const [isEditing, setIsEditing] = useState(false);
-  const [editName, setEditName] = useState<string>("");
+function HabitItem({ habit, toggleDay, deleteHabit }: HabitItemProps) {
+  const {
+    isEditing,
+    editName,
+    setEditName,
+    startEditing,
+    cancelEditing,
+    saveEditing,
+    deleteCurrentHabit,
+  } = useHabitItem(habit);
 
   const percentage = getHabitPercentage(habit);
   const isWeekCompleted = isHabitWeekCompleted(habit);
-
-  const startEditing = (habitName: string) => {
-    setIsEditing(true);
-    setEditName(habitName);
-  };
-
-  const handleSave = (id: Habit["id"]) => {
-    updateHabit(id, editName);
-    setIsEditing(false);
-    setEditName("");
-  };
 
   return (
     <div className="bg-white w-full h-auto p-3 mb-3 rounded-lg shadow-lg">
@@ -102,18 +92,13 @@ function HabitItem({
                   className="cursor-pointer"
                   aria-label="Botón Guardar hábito"
                   src={SaveIcon}
-                  onClick={() => {
-                    handleSave(habit.id);
-                  }}
+                  onClick={saveEditing}
                 />
                 <img
                   className="cursor-pointer"
                   aria-label="Boton Cancelar hábito"
                   src={CancelIcon}
-                  onClick={() => {
-                    setIsEditing(false);
-                    setEditName("");
-                  }}
+                  onClick={cancelEditing}
                 />
               </div>
             ) : (
@@ -122,18 +107,13 @@ function HabitItem({
                   className="cursor-pointer"
                   aria-label="Botón editar hábito"
                   src={EditIcon}
-                  onClick={() => {
-                    startEditing(habit.name);
-                  }}
+                  onClick={startEditing}
                 />
                 <img
                   className="cursor-pointer"
                   aria-label="Botón Eliminar hábito"
                   src={DeleteIcon}
-                  onClick={() => {
-                    window.confirm("Eliminar hábito? ") &&
-                      deleteHabit(habit.id);
-                  }}
+                  onClick={deleteCurrentHabit}
                 />
               </div>
             )}

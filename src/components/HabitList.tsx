@@ -79,7 +79,6 @@ const HabitList = () => {
                     key={habit.id}
                     habit={habit}
                     toggleDay={toggleDay}
-                    updateHabit={updateHabit}
                     deleteHabit={deleteHabit}
                   />
                 );
