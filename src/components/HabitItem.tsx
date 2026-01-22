@@ -8,6 +8,7 @@ import DeleteIcon from "../icons/delete.svg";
 import EditIcon from "../icons/edit.svg";
 import SaveIcon from "../icons/save.svg";
 import type { Habit, HabitDays } from "../types";
+import HabitBadge from "./HabitBadge";
 
 type HabitItemProps = {
   habit: Habit;
@@ -48,21 +49,8 @@ function HabitItem({ habit, toggleDay, deleteHabit }: HabitItemProps) {
           ) : (
             <p className="font-semibold text-gray-800 truncate">{habit.name}</p>
           )}
-          {/* Badge */}
-          {isWeekCompleted && (
-            <span
-              className="
-                  sm:absolute top-6 
-                  inline-block whitespace-nowrap
-                  text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full
-                  transition-all duration-300 ease-out
-                  animate-badge
-                  sm:[animation-delay:75ms]
-                  "
-            >
-              Semana completada
-            </span>
-          )}
+
+          <HabitBadge isWeekCompleted={isWeekCompleted} />
         </div>
 
         {/* Barra */}
