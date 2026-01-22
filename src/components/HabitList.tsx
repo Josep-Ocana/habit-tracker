@@ -1,11 +1,9 @@
 import { useMemo } from "react";
-import {
-  getGlobalPercentage,
-  someDayCompleted,
-} from "../domains/habits.domain";
+import { getGlobalPercentage, someDayCompleted } from "../habits/habits.domain";
 import { useHabits } from "../hooks/useHabits";
 
 import HabitItem from "./HabitItem";
+import HabitProgress from "./HabitProgress";
 
 const HabitList = () => {
   const { state, resetWeek, toggleDay, updateHabit, deleteHabit } = useHabits();
@@ -38,19 +36,7 @@ const HabitList = () => {
               {/* Barra */}
 
               <p className="font-semibold shrink-0">Progreso Semanal:</p>
-              <div className="w-full bg-gray-300 rounded-full h-4 overflow-hidden">
-                <div
-                  className={`h-full transition-all duration-500 ${
-                    globalPercentage < 40
-                      ? "bg-red-500"
-                      : globalPercentage < 70
-                        ? "bg-yellow-500"
-                        : "bg-green-500"
-                  }`}
-                  style={{ width: `${globalPercentage}%` }}
-                ></div>
-              </div>
-              <p className="font-semibold shrink-0">{globalPercentage} %</p>
+              <HabitProgress percentage={globalPercentage} />
             </div>
 
             <button

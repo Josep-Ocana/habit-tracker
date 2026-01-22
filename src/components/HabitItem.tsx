@@ -1,7 +1,7 @@
 import {
   getHabitPercentage,
   shouldShowCompletedBadge,
-} from "../domains/habits.domain";
+} from "../habits/habits.domain";
 import { useHabitItem } from "../hooks/useHabitItem";
 import CancelIcon from "../icons/cancel.svg";
 import DeleteIcon from "../icons/delete.svg";
@@ -9,6 +9,7 @@ import EditIcon from "../icons/edit.svg";
 import SaveIcon from "../icons/save.svg";
 import type { Habit, HabitDays } from "../types";
 import HabitBadge from "./HabitBadge";
+import HabitProgress from "./HabitProgress";
 
 type HabitItemProps = {
   habit: Habit;
@@ -16,7 +17,7 @@ type HabitItemProps = {
   deleteHabit: (id: string) => void;
 };
 
-function HabitItem({ habit, toggleDay, deleteHabit }: HabitItemProps) {
+function HabitItem({ habit, toggleDay }: HabitItemProps) {
   const {
     isEditing,
     editName,
@@ -55,22 +56,7 @@ function HabitItem({ habit, toggleDay, deleteHabit }: HabitItemProps) {
 
         {/* Barra */}
         <div className="flex items-center gap-2">
-          <div className="w-60 bg-gray-300 rounded-full h-3 overflow-hidden">
-            <div
-              className={`h-full transition-all duration-500 ${
-                percentage < 40
-                  ? "bg-red-500"
-                  : percentage < 70
-                    ? "bg-yellow-500"
-                    : "bg-green-500"
-              }`}
-              style={{ width: `${percentage}%` }}
-            ></div>
-          </div>
-          {/* %*/}
-          <span className="relative font-semibold w-10 text-right mr-3">
-            {percentage}%
-          </span>
+          <HabitProgress percentage={percentage} />
 
           {/* Botones*/}
           <div className="w-14 flex justify-end gap-1">
