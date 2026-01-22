@@ -1,9 +1,9 @@
 type HabitBadgeProps = {
-  isWeekCompleted: boolean;
+  show: boolean;
 };
 
-const HabitBadge = ({ isWeekCompleted }: HabitBadgeProps) => {
-  if (!isWeekCompleted) return null;
+const HabitBadge = ({ show }: HabitBadgeProps) => {
+  if (!show) return null;
 
   return (
     <span

@@ -1,6 +1,6 @@
 import {
   getHabitPercentage,
-  isHabitWeekCompleted,
+  shouldShowCompletedBadge,
 } from "../domains/habits.domain";
 import { useHabitItem } from "../hooks/useHabitItem";
 import CancelIcon from "../icons/cancel.svg";
@@ -28,7 +28,7 @@ function HabitItem({ habit, toggleDay, deleteHabit }: HabitItemProps) {
   } = useHabitItem(habit);
 
   const percentage = getHabitPercentage(habit);
-  const isWeekCompleted = isHabitWeekCompleted(habit);
+  const showCompletedBadge = shouldShowCompletedBadge(habit);
 
   return (
     <div className="bg-white w-full h-auto p-3 mb-3 rounded-lg shadow-lg">
@@ -50,7 +50,7 @@ function HabitItem({ habit, toggleDay, deleteHabit }: HabitItemProps) {
             <p className="font-semibold text-gray-800 truncate">{habit.name}</p>
           )}
 
-          <HabitBadge isWeekCompleted={isWeekCompleted} />
+          <HabitBadge show={showCompletedBadge} />
         </div>
 
         {/* Barra */}

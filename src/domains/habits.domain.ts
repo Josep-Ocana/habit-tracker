@@ -28,3 +28,7 @@ export const getGlobalPercentage = (habits: Habit[]): number => {
 export const someDayCompleted = (habit: Habit): boolean => {
   return Object.values(habit.days).some(Boolean);
 };
+
+export const shouldShowCompletedBadge = (habit: Habit): boolean => {
+  return isHabitWeekCompleted(habit);
+};
