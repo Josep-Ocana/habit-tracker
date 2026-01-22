@@ -1,13 +1,21 @@
-import { getProgressBarColor } from "../habits/habits.ui";
+import { getProgressBarColor, sizes } from "../habits/habits.ui";
 
 type HabitProgressProps = {
   percentage: number;
+  size?: "sm" | "md";
 };
 
-const HabitProgress = ({ percentage }: HabitProgressProps) => {
+const HabitProgress = ({ percentage, size = "sm" }: HabitProgressProps) => {
+  const classSize = sizes[size];
   return (
     <>
-      <div className="w-60 bg-gray-300 rounded-full h-3 overflow-hidden">
+      <div
+        className={`bg-gray-300 rounded-full overflow-hidden ${classSize}`}
+        role="progressbar"
+        aria-valuenow={percentage}
+        aria-valuemin={0}
+        aria-valuemax={100}
+      >
         <div
           className={`h-full transition-all duration-500 ${getProgressBarColor(percentage)}`}
           style={{ width: `${percentage}%` }}

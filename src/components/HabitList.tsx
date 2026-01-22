@@ -36,7 +36,7 @@ const HabitList = () => {
               {/* Barra */}
 
               <p className="font-semibold shrink-0">Progreso Semanal:</p>
-              <HabitProgress percentage={globalPercentage} />
+              <HabitProgress percentage={globalPercentage} size={"md"} />
             </div>
 
             <button
