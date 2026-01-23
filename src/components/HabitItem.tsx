@@ -15,7 +15,6 @@ import HabitProgress from "./HabitProgress";
 type HabitItemProps = {
   habit: Habit;
   toggleDay: (id: string, day: keyof HabitDays) => void;
-  deleteHabit: (id: string) => void;
 };
 
 function HabitItem({ habit, toggleDay }: HabitItemProps) {
@@ -100,7 +99,8 @@ function HabitItem({ habit, toggleDay }: HabitItemProps) {
         {(Object.entries(habit.days) as [keyof HabitDays, boolean][]).map(
           ([day, value]) => (
             <button
-              className={` px-2 py-1 text-xs rounded-md transition shrink-0 ${
+              key={day}
+              className={` px-2 py-1 text-xs rounded-md transition-all duration-200 transform hover:scale-105 shrink-0 ${
                 value
                   ? "bg-green-500 hover:bg-green-600 text-white"
                   : "bg-gray-200 text-gray-700 hover:bg-gray-300"
