@@ -1,3 +1,4 @@
+import React from "react";
 import { getProgressBarColor, sizes } from "../habits/habits.ui";
 
 type HabitProgressProps = {
@@ -29,4 +30,4 @@ const HabitProgress = ({ percentage, size = "sm" }: HabitProgressProps) => {
   );
 };
 
-export default HabitProgress;
+export default React.memo(HabitProgress);

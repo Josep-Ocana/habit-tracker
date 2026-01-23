@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useCallback, useContext } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { HabitContext } from "../context/HabitContext";
 import type { Habit, HabitDays } from "../types";
@@ -43,9 +43,12 @@ export function useHabits() {
     dispatch({ type: "RESET_WEEK" });
   };
 
-  const toggleDay = (id: Habit["id"], day: keyof HabitDays) => {
-    dispatch({ type: "TOGGLE_DAY", payload: { habitId: id, day } });
-  };
+  const toggleDay = useCallback(
+    (id: Habit["id"], day: keyof HabitDays) => {
+      dispatch({ type: "TOGGLE_DAY", payload: { habitId: id, day } });
+    },
+    [dispatch],
+  );
 
   return {
     addHabit,

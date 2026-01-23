@@ -1,3 +1,4 @@
+import React from "react";
 import {
   getHabitPercentage,
   shouldShowCompletedBadge,
@@ -115,4 +116,6 @@ function HabitItem({ habit, toggleDay }: HabitItemProps) {
   );
 }
 
-export default HabitItem;
+export default React.memo(HabitItem, (prev, next) => {
+  return prev.habit === next.habit;
+});

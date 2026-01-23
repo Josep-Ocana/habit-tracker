@@ -6,7 +6,7 @@ import HabitItem from "./HabitItem";
 import HabitProgress from "./HabitProgress";
 
 const HabitList = () => {
-  const { state, resetWeek, toggleDay, updateHabit, deleteHabit } = useHabits();
+  const { state, resetWeek, toggleDay, deleteHabit } = useHabits();
 
   // Calcular progreso semanal
   const globalPercentage = useMemo(
