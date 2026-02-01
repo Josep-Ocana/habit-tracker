@@ -14,8 +14,38 @@ app.use(cors()); // Permite peticiones desde otros orígenes
 app.use(express.json()); // Permite leer JSON desde el body
 
 // Define rutas
-app.get("/health", (_req, res) => {
-  res.json({ status: "ok" });
+
+const mockHabits = [
+  {
+    id: "1",
+    name: "Leer",
+    days: {
+      mon: true,
+      tue: true,
+      wed: false,
+      thu: true,
+      fri: true,
+      sat: true,
+      sun: true,
+    },
+  },
+  {
+    id: "2",
+    name: "Gym",
+    days: {
+      mon: true,
+      tue: true,
+      wed: false,
+      thu: true,
+      fri: true,
+      sat: false,
+      sun: true,
+    },
+  },
+];
+
+app.get("/habits", (_req, res) => {
+  res.json(mockHabits);
 });
 
 // Escucha en un puerto
